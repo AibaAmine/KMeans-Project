@@ -22,20 +22,20 @@ print("=" * 60)
 # 1.1: Load the Dataset
 # Define column names for the Heart Disease dataset
 column_names = [
-    "age", 
-    "sex", 
-    "cp", 
-    "trestbps",  
-    "chol",  
-    "fbs", 
-    "restecg", 
-    "thalach", 
-    "exang", 
-    "oldpeak", 
-    "slope",  
-    "ca",  
-    "thal",  
-    "target", 
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal",
+    "target",
 ]
 
 # Load the dataset from CSV file
@@ -221,7 +221,8 @@ cluster_centers = final_kmeans.cluster_centers_
 
 print(f"\n2.5: Cluster Centers")
 print(f"Number of clusters: {optimal_k}")
-print(f"Shape: {cluster_centers.shape}")  # (3, 22) - 3 clusters, 22 features each
+print(f"Shape: {cluster_centers.shape}")  #
+
 for i, center in enumerate(cluster_centers):
     print(f"\nCluster {i}:")
     print(center)
@@ -282,6 +283,7 @@ for k in k_comparison_range:
     inertia = temp_kmeans.inertia_
 
     # Store for plotting
+    silhouette_scores.append(sil)
     db_scores.append(db)
     inertia_scores.append(inertia)
 
@@ -289,7 +291,7 @@ for k in k_comparison_range:
 
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(18, 5))
 
-# Plot 1: Silhouette Score (Higher is better)
+# Plot 1: Silhouette Score
 ax1.plot(k_comparison_range, silhouette_scores, marker="o", color="blue", linewidth=2)
 ax1.set_xlabel("Number of clusters (k)")
 ax1.set_ylabel("Silhouette Score")
@@ -298,7 +300,7 @@ ax1.grid(True, alpha=0.3)
 ax1.axvline(x=optimal_k, color="red", linestyle="--", label=f"Optimal k={optimal_k}")
 ax1.legend()
 
-# Plot 2: Davies-Bouldin Index (Lower is better)
+# Plot 2: Davies-Bouldin Index
 ax2.plot(k_comparison_range, db_scores, marker="s", color="red", linewidth=2)
 ax2.set_xlabel("Number of clusters (k)")
 ax2.set_ylabel("Davies-Bouldin Index")
@@ -328,7 +330,10 @@ print(f"\n3.4: Visualizing clustering with PCA...")
 pca = PCA(n_components=2)  # Reduce to 2 principal components
 X_train_pca = pca.fit_transform(X_train)  # Transform training data
 X_test_pca = pca.transform(X_test)  # Transform test data
-cluster_centers_pca = pca.transform(cluster_centers)  # Transform centroids
+
+
+cluster_centers_df = pd.DataFrame(cluster_centers, columns=all_features)
+cluster_centers_pca = pca.transform(cluster_centers_df)  # Transform centroids
 
 print(f"Explained variance: {pca.explained_variance_ratio_}")
 print(f"Total variance explained: {sum(pca.explained_variance_ratio_)*100:.2f}%")
